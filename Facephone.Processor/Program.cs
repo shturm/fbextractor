@@ -8,16 +8,6 @@ namespace Facephone.Processor
 	{
 		public static void Main (string [] args)
 		{
-			Console.WriteLine ("Hello World!");
-			if (!File.Exists (ConfigurationManager.AppSettings["DataFile"]))
-			{
-				File.WriteAllText (ConfigurationManager.AppSettings["Datafile"],"[]");
-			}
-			if (!File.Exists (ConfigurationManager.AppSettings ["QueueFile"]))
-			{
-				File.WriteAllText (ConfigurationManager.AppSettings ["QueueFile"], "[]");
-			}
-
 			QueueProcessor process = new QueueProcessor ();
 			Console.WriteLine ("Starting...");
 			process.Start ();
