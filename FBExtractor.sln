@@ -1,0 +1,51 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBExtractor", "FBExtractor.csproj", "{135D83F9-C443-4EBD-8092-F1E28B072099}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{70B4E07D-010D-43D9-8B40-5C67E0931094}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBExtractorGUI", "FBExtractorGUI\FBExtractorGUI.csproj", "{63AECB1C-0FFB-4876-A06F-F9ACAA22A65D}"
+EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Packages", "Packages.mdproj", "{90C8C884-53B9-4E98-A5D1-DA9D0949DE90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facephone", "Facephone\Facephone.csproj", "{0B4BA852-E40F-464F-82DC-AC3EF57299C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facephone.Web", "Facephone.Web\Facephone.Web.csproj", "{98460B6E-6855-4A9E-AECA-48AB9D8FFA37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facephone.Processor", "Facephone.Processor\Facephone.Processor.csproj", "{57FEECBF-45F9-42CC-B585-30A520CAAA72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{135D83F9-C443-4EBD-8092-F1E28B072099}.Debug|x86.ActiveCfg = Debug|x86
+		{135D83F9-C443-4EBD-8092-F1E28B072099}.Debug|x86.Build.0 = Debug|x86
+		{135D83F9-C443-4EBD-8092-F1E28B072099}.Release|x86.ActiveCfg = Release|x86
+		{135D83F9-C443-4EBD-8092-F1E28B072099}.Release|x86.Build.0 = Release|x86
+		{70B4E07D-010D-43D9-8B40-5C67E0931094}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70B4E07D-010D-43D9-8B40-5C67E0931094}.Debug|x86.Build.0 = Debug|Any CPU
+		{70B4E07D-010D-43D9-8B40-5C67E0931094}.Release|x86.ActiveCfg = Release|Any CPU
+		{70B4E07D-010D-43D9-8B40-5C67E0931094}.Release|x86.Build.0 = Release|Any CPU
+		{63AECB1C-0FFB-4876-A06F-F9ACAA22A65D}.Debug|x86.ActiveCfg = Debug|x86
+		{63AECB1C-0FFB-4876-A06F-F9ACAA22A65D}.Debug|x86.Build.0 = Debug|x86
+		{63AECB1C-0FFB-4876-A06F-F9ACAA22A65D}.Release|x86.ActiveCfg = Release|x86
+		{63AECB1C-0FFB-4876-A06F-F9ACAA22A65D}.Release|x86.Build.0 = Release|x86
+		{90C8C884-53B9-4E98-A5D1-DA9D0949DE90}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90C8C884-53B9-4E98-A5D1-DA9D0949DE90}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B4BA852-E40F-464F-82DC-AC3EF57299C2}.Debug|x86.ActiveCfg = Debug|x86
+		{0B4BA852-E40F-464F-82DC-AC3EF57299C2}.Debug|x86.Build.0 = Debug|x86
+		{0B4BA852-E40F-464F-82DC-AC3EF57299C2}.Release|x86.ActiveCfg = Release|x86
+		{0B4BA852-E40F-464F-82DC-AC3EF57299C2}.Release|x86.Build.0 = Release|x86
+		{98460B6E-6855-4A9E-AECA-48AB9D8FFA37}.Debug|x86.ActiveCfg = Debug|x86
+		{98460B6E-6855-4A9E-AECA-48AB9D8FFA37}.Debug|x86.Build.0 = Debug|x86
+		{98460B6E-6855-4A9E-AECA-48AB9D8FFA37}.Release|x86.ActiveCfg = Release|x86
+		{98460B6E-6855-4A9E-AECA-48AB9D8FFA37}.Release|x86.Build.0 = Release|x86
+		{57FEECBF-45F9-42CC-B585-30A520CAAA72}.Debug|x86.ActiveCfg = Debug|x86
+		{57FEECBF-45F9-42CC-B585-30A520CAAA72}.Debug|x86.Build.0 = Debug|x86
+		{57FEECBF-45F9-42CC-B585-30A520CAAA72}.Release|x86.ActiveCfg = Release|x86
+		{57FEECBF-45F9-42CC-B585-30A520CAAA72}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+EndGlobal

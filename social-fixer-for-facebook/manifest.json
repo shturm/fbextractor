@@ -1,0 +1,37 @@
+{
+   "author": "Matt Kruse",
+   "content_scripts": [ {
+      "css": [ "style.css", "inline-images.css" ],
+      "exclude_globs": [ "http://*.channel.facebook.com/*", "http://static.*.facebook.com/*", "http://*.facebook.com/ai.php*", "http://*.facebook.com/connect/*", "https://*.channel.facebook.com/*", "https://static.*.facebook.com/*", "https://*.facebook.com/ai.php*", "https://*.facebook.com/connect/*", "https://*.facebook.com/saved*" ],
+      "include_globs": [ "http://*.facebook.com/*", "http://facebook.com/*", "https://*.facebook.com/*", "https://facebook.com/*" ],
+      "js": [ "x.js", "fx.js", "post_processor.js", "apps/apps.js", "anonymize/anonymize.js", "comment_button/comment_button.js", "comment_navigator/comment_navigator.js", "bubble_note/bubble_note.js", "control_panel/control_panel.js", "debug/debug_insertion_order.js", "debug/debug_post_html.js", "debug/debug_post_update_tracking.js", "display_tweaks/display_tweaks.js", "disable_tooltips/disable_tooltips.js", "donate/donate.js", "external_css/external_css.js", "hide/hide.js", "font_family/font_family.js", "hovercard/hovercard.js", "fix_timestamps/fix_timestamps.js", "mark_read/mark_read.js", "menu/menu.js", "messages/message_links_to_messenger.js", "most_recent/most_recent.js", "notification_popup/notification_popup.js", "notify/notify.js", "options/options.js", "post_filters/post_filters.js", "post_filters/post_tabs.js", "post_font/post_font.js", "regex_tester/regex_tester.js", "remove_columns/remove_columns.js", "sfx_collision/sfx_collision.js", "stealthmode/stealthmode.js", "sticky_note/sticky_note.js", "storage_check/storage_check.js", "stretch_wide/stretch_wide.js", "tips/tip_autoplay_videos.js", "tips/tip_friends_privacy.js", "tips/tip_hide_birthday.js", "tips/tip_live_video_notifications.js", "tips/tip_page_notifications.js", "tips/tip_timeline_posts.js", "watch/social_fixer_watch.js", "trending_bars/trending_bars.js", "vue.min.js", "vue_sfx.js", "purify.min.js", "index.js" ],
+      "matches": [ "http://*.facebook.com/*", "https://*.facebook.com/*" ],
+      "run_at": "document_start"
+   } ],
+   "description": "Social Fixer for Facebook (Smetko)",
+   "homepage_url": "http://SocialFixer.com/",
+   "icons": {
+      "128": "icon128.png",
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png"
+   },
+   "manifest_version": 2,
+   "minimum_chrome_version": "41.0",
+   "name": "Social Fixer for Facebook (Smetko)",
+   "options_ui": {
+      "open_in_tab": true,
+      "page": "options.html"
+   },
+   "page_action": {
+      "default_icon": {
+         "19": "icon19.png",
+         "38": "icon38.png"
+      },
+      "default_popup": "options.html",
+      "default_title": "Social Fixer (Smetko)"
+   },
+   "permissions": [ "http://*.SocialFixer.com/*", "https://matt-kruse.github.io/*", "http://*.facebook.com/*", "https://*.facebook.com/*", "storage", "unlimitedStorage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "17.1.0"
+}

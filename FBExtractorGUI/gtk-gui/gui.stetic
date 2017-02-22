@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stetic-interface>
+  <configuration>
+    <images-root-path>..</images-root-path>
+  </configuration>
+  <import>
+    <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="../bin/Debug/FBExtractorGUI.exe" internal="true" />
+  </import>
+  <widget class="Gtk.Window" id="MainWindow" design-size="864 351">
+    <property name="MemberName" />
+    <property name="Title" translatable="yes">Smetko FBExtractor</property>
+    <property name="WindowPosition">CenterOnParent</property>
+    <signal name="DeleteEvent" handler="OnDeleteEvent" />
+    <child>
+      <widget class="Gtk.Fixed" id="fixed1">
+        <property name="MemberName" />
+        <property name="HasWindow">False</property>
+        <child>
+          <widget class="Gtk.Button" id="btnStartStop">
+            <property name="MemberName" />
+            <property name="WidthRequest">90</property>
+            <property name="HeightRequest">43</property>
+            <property name="CanFocus">True</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">Старт</property>
+            <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="OnToggleClickEvent" />
+          </widget>
+          <packing>
+            <property name="X">9</property>
+            <property name="Y">14</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="lblStatusValue">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">Спрян</property>
+          </widget>
+          <packing>
+            <property name="X">121</property>
+            <property name="Y">26</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="lblCurrentAlertLabel">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">Текущо известие:</property>
+          </widget>
+          <packing>
+            <property name="X">9</property>
+            <property name="Y">103</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="lblLog">
+            <property name="MemberName" />
+            <property name="WidthRequest">450</property>
+            <property name="HeightRequest">80</property>
+            <property name="LabelProp" translatable="yes">&lt;Статус&gt;</property>
+            <property name="Wrap">True</property>
+          </widget>
+          <packing>
+            <property name="X">414</property>
+            <property name="Y">11</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="lblOldAlertLabel">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">Предходно известие:</property>
+          </widget>
+          <packing>
+            <property name="X">8</property>
+            <property name="Y">231</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
+            <property name="MemberName" />
+            <property name="ShadowType">In</property>
+            <child>
+              <widget class="Gtk.TextView" id="tvCurrentAlert">
+                <property name="MemberName" />
+                <property name="WidthRequest">600</property>
+                <property name="CanFocus">True</property>
+                <property name="ShowScrollbars">True</property>
+                <property name="Text" translatable="yes" />
+                <property name="WrapMode">Word</property>
+              </widget>
+            </child>
+          </widget>
+          <packing>
+            <property name="X">5</property>
+            <property name="Y">131</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder />
+        </child>
+        <child>
+          <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
+            <property name="MemberName" />
+            <property name="ShadowType">In</property>
+            <child>
+              <widget class="Gtk.TextView" id="tvOldAllert">
+                <property name="MemberName" />
+                <property name="WidthRequest">600</property>
+                <property name="CanFocus">True</property>
+                <property name="ShowScrollbars">True</property>
+                <property name="Editable">False</property>
+                <property name="Text" translatable="yes" />
+                <property name="WrapMode">Word</property>
+              </widget>
+            </child>
+          </widget>
+          <packing>
+            <property name="X">10</property>
+            <property name="Y">268</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</stetic-interface>
