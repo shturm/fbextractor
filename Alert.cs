@@ -18,7 +18,6 @@ namespace FBExtractor
 
 		public string OriginalUrl;
 
-
 		public Alert ()
 		{
 
