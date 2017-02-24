@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright ("alx")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
-
+[assembly: InternalsVisibleTo("Facephone.Processor.Tests")]
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
