@@ -59,8 +59,6 @@ namespace FBExtractor
 			LogEvent += OnLog;
 			StatusChanged += OnStatusChanged;
 
-			if (!File.Exists ("log.txt")) File.WriteAllText ("log.txt", "");
-
 			Configure ();
 			FacebookLogin ();
 #if !DEBUG
@@ -416,7 +414,7 @@ namespace FBExtractor
 			WaitRandom ();
 		}
 
-		static void FacebookLogin ()
+		public static void FacebookLogin ()
 		{
 			LogEvent ("Влизане във Фейсбук...");
 			Driver.Navigate ().GoToUrl ("https://facebook.com");
@@ -424,8 +422,8 @@ namespace FBExtractor
 
 			var elUser = FindElement (By.Name ("email"));
 			var elPass = FindElement (By.Name ("pass"));
-			elUser.SendKeys (fbUsername);
-			elPass.SendKeys (fbPassword);
+			elUser.SendKeys (ConfigurationManager.AppSettings["facebook-username"]);
+			elPass.SendKeys (ConfigurationManager.AppSettings["facebook-password"]);
 			elPass.SendKeys (Keys.Return);
 
 			WaitRandom ();

@@ -8,10 +8,11 @@ namespace Facephone.Processor
 	{
 		public static void Main (string [] args)
 		{
-			QueueProcessor process = new QueueProcessor ();
+			QueueProcessor processor = new QueueProcessor ();
+            processor.Init();
 			Console.WriteLine ("Starting...");
-			process.Start ();
-			process.ProcessorTask.Wait ();
+			processor.Start ();
+			processor.ProcessorTask.Wait ();
 			Console.WriteLine ("Stopping...");
 		}
 	}

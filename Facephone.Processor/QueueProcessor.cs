@@ -7,21 +7,56 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Data.SQLite;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Interactions;
 
 namespace Facephone
 {
 	public class QueueProcessor
 	{
-		CancellationTokenSource _tokenSource;
 		public Task ProcessorTask { get; private set;}
+		CancellationTokenSource _tokenSource;
+        bool _initiated = false;
+
+        IWebDriver Driver;
+        WebDriverWait Wait;
 
 		public QueueProcessor ()
 		{
-			
-		}
+            
+        }
+
+        public void Init()
+        {
+            _initiated = true;
+
+            var options = new ChromeOptions();
+            options.AddArgument("--disable-notifications");
+            Driver = new ChromeDriver("selenium", options);
+            Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
+
+            // facebook login
+            Log("Влизане във Фейсбук...");
+            Driver.Navigate().GoToUrl("https://facebook.com");
+            Wait.Until(ExpectedConditions.ElementIsVisible(By.Name("email")));
+
+            var elUser = Driver.FindElement(By.Name("email"));
+            var elPass = Driver.FindElement(By.Name("pass"));
+            elUser.SendKeys(ConfigurationManager.AppSettings["facebook-username"]);
+            elPass.SendKeys(ConfigurationManager.AppSettings["facebook-password"]);
+            elPass.SendKeys(Keys.Return);
+
+            Log("Влизането във Фейсбук е успешно");
+        }
 
 		public void Start()
 		{
+            if (!_initiated)
+            {
+                if (ProcessorTask.IsCompleted) throw new MethodAccessException("QueueProcessor not initiated");
+            }
 			if (ProcessorTask != null)
 			{
 				if (ProcessorTask.IsCompleted) throw new MethodAccessException("QueueProcessor already started");
