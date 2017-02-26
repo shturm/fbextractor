@@ -32,8 +32,6 @@ namespace Facephone
 			return p;
 		}
 
-
-
         void Enque(string phoneNumber)
         {
             bool alreadyEnqued = false;

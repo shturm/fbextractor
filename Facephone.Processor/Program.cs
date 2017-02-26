@@ -8,12 +8,19 @@ namespace Facephone.Processor
 	{
 		public static void Main (string [] args)
 		{
+            Log("FACEPHONE.PROCESSOR\n===================");
 			QueueProcessor processor = new QueueProcessor ();
             processor.Init();
-			Console.WriteLine ("Starting...");
+            Log("Starting...");
 			processor.Start ();
 			processor.ProcessorTask.Wait ();
-			Console.WriteLine ("Stopping...");
+            Log("Stopping...");
 		}
-	}
+
+        static void Log(string msg, Phone phone = null)
+        {
+            Console.WriteLine("<Facephone.Processor> " + msg);
+            File.AppendAllText(ConfigurationManager.AppSettings["LogFile"], "<Facephone.Processor> " + msg + "\n");
+        }
+    }
 }

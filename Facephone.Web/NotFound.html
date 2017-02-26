@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>PHONENUMBER не е намерен</title>
+</head>
+<body>
+    <h1>PHONENUMBER не е намерен</h1>
+    <h2></h2>
+    
+    <p>Номера е добавен за сканиране. Страницата ще се презареди след 15 секунди. Номерата се обработват в реда в който са постъпили. Моля бъдете търпеливи.</p>
+    
+    <script>
+        let seconds = 10;
+        setInterval(() => {
+            seconds--;
+            document.querySelectorAll("h2")[0].innerHTML = `Презареждане след ${seconds}`;
+            if (seconds == 0)
+            {
+                window.location.href = window.location.href
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

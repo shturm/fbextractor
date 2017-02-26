@@ -32,7 +32,7 @@ namespace Facephone
             BannedDomains = GetBannedDomains();
         }
 
-        
+
 
         public void Init()
         {
@@ -74,36 +74,32 @@ namespace Facephone
                 {
                     if (_tokenSource.Token.IsCancellationRequested) break;
 
-                    Log($"Dequeing...");
                     string phoneNumber = StartProcessing();
 
                     if (string.IsNullOrEmpty(phoneNumber))
                     {
-                        Log($"Queue is empty, continue");
                         await Task.Delay(TimeSpan.FromSeconds(5));
                         continue; // nothing to process
                     }
 
-                    Log($"Scanning for '{phoneNumber}'");
+                    Log($"Processing '{phoneNumber}'");
                     var fbResult = ScanFacebook(phoneNumber);
                     var links = new List<string>();
 
                     var googlePhones = Breakdown(phoneNumber);
                     foreach (string gglPhone in googlePhones)
                     {
-                        List<string> gglLinks = GoogleScan(gglPhone);
+                        List<string> gglLinks = ScanGoogle(gglPhone);
                         links.AddRange(gglLinks);
                     }
 
                     if (!string.IsNullOrEmpty(fbResult.FacebookId)) links.Add($"https://www.facebook.com/{fbResult.FacebookId}");
                     var scanned = new Phone(phoneNumber, fbResult.FacebookId, fbResult.HasPosts, links);
 
-                    Log($"Found {scanned.Links.Count} links. Saving...");
+                    Log($"Processed {phoneNumber} - {scanned.FacebookId} {scanned.Links.Count} links");
                     SaveProcessedPhone(scanned);
 
-                    Log($"Saved. Marking processed...");
                     EndProcessing(phoneNumber);
-                    Log($"Marked '{phoneNumber}' processed. Waiting...");
 
                     await Task.Delay(TimeSpan.FromSeconds(5));
 
@@ -111,40 +107,7 @@ namespace Facephone
             }, _tokenSource.Token);
         }
 
-        private List<string> GoogleScan(string gglPhone)
-        {
-            var result = new List<string>();
-            Driver.Navigate().GoToUrl($"https://google.com?#safe=off&q={gglPhone}");
-            Wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("g")));
-            var gglResults = Driver.FindElements(By.ClassName("g"));
 
-            List<string> variations = Variations(gglPhone.Replace(" ", ""));
-
-            foreach (var gglItem in gglResults)
-            {
-                string url = gglItem.FindElement(By.TagName("a")).GetAttribute("href");
-                // always add facebook
-                if (url.Contains("facebook.com"))
-                {
-                    result.Add(url);
-                    continue;
-                }
-                if (BannedDomains.Any(d=>url.Contains(d)))
-                {
-                    continue;
-                }
-
-                foreach (var v in variations)
-                {
-                    if (gglItem.Text.Contains(v))
-                    {
-                        result.Add(url);
-                    }
-                }
-            }
-
-            return result;
-        }
 
         private List<string> Variations(string phoneNumber)
         {
@@ -309,11 +272,44 @@ namespace Facephone
 
             return new FacebookScanResult(facebookId);
         }
+        private List<string> ScanGoogle(string gglPhone)
+        {
+            var result = new List<string>();
+            Driver.Navigate().GoToUrl($"https://google.com?#safe=off&q={gglPhone}");
+            Wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("g")));
+            var gglResults = Driver.FindElements(By.ClassName("g"));
 
+            List<string> variations = Variations(gglPhone.Replace(" ", ""));
+
+            foreach (var gglItem in gglResults)
+            {
+                string url = gglItem.FindElement(By.TagName("a")).GetAttribute("href");
+                // always add facebook
+                if (url.Contains("facebook.com"))
+                {
+                    result.Add(url);
+                    continue;
+                }
+                if (BannedDomains.Any(d => url.Contains(d)))
+                {
+                    continue;
+                }
+
+                foreach (var v in variations)
+                {
+                    if (gglItem.Text.Contains(v))
+                    {
+                        result.Add(url);
+                    }
+                }
+            }
+
+            return result;
+        }
         void Log(string msg, Phone phone = null)
         {
-            Console.WriteLine(msg);
-            File.AppendAllText(ConfigurationManager.AppSettings["LogFile"], msg + "\n");
+            Console.WriteLine("<Facephone.Processor> " + msg);
+            File.AppendAllText(ConfigurationManager.AppSettings["LogFile"],"<Facephone.Processor> "+ msg + "\n");
         }
         internal List<string> Breakdown(string phoneNumber)
         {
