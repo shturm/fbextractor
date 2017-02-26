@@ -15,7 +15,6 @@ namespace Facephone.Web
 	{
 		public static void Main (string [] args)
 		{
-			var facephone = new FacephoneService ();
             string uri = "http://localhost:8080";
 
             Log("FACEPHONE.WEB\n===================");
