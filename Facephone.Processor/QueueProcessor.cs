@@ -334,7 +334,7 @@ namespace Facephone
         {
             _logger.Info(msg);
             //Console.WriteLine("<Facephone.Processor> " + msg);
-            File.AppendAllText(ConfigurationManager.AppSettings["LogFile"],"<Facephone.Processor> "+ msg + "\n");
+            //File.AppendAllText(ConfigurationManager.AppSettings["LogFile"],"<Facephone.Processor> "+ msg + "\n");
         }
         internal List<string> Breakdown(string phoneNumber)
         {
