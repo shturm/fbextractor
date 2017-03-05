@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Data.SQLite;
+using Facephone.Core;
 
 namespace Facephone
 {
@@ -69,7 +70,7 @@ namespace Facephone
             string phoneId = null;
             string facebookId = null;
             bool hasFacebookPosts = false;
-            List<string> links = new List<string>();
+            Dictionary<string, string> linksAndHtml = new Dictionary<string, string>();
 
             string cs = ConfigurationManager.AppSettings["ConnectionString"];
             using (var con = new SQLiteConnection(cs))
@@ -100,12 +101,12 @@ namespace Facephone
                     using (var cmd2 = con.CreateCommand())
                     {
                         cmd2.Transaction = tr;
-                        cmd2.CommandText = $"SELECT Url FROM Links where PhoneId = '{phoneId}'";
+                        cmd2.CommandText = $"SELECT Url, Html FROM Links where PhoneId = '{phoneId}'";
                         using (var reader = cmd2.ExecuteReader())
                         {
                             while(reader.Read())
                             {
-                                links.Add(reader["Url"].ToString());
+                                linksAndHtml.Add(reader["Url"].ToString(), reader["Html"].ToString());
                             }
                         }
                     }
@@ -114,7 +115,7 @@ namespace Facephone
                 }
             }
 
-            return new Phone(phoneNumber, facebookId, hasFacebookPosts, links);
+            return new Phone(phoneNumber, facebookId, hasFacebookPosts, linksAndHtml);
         }
 
         private void Validate(string phone)

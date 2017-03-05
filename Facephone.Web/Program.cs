@@ -8,6 +8,7 @@ using Microsoft.Owin;
 using System.IO;
 using System.Linq;
 using System.Configuration;
+using Facephone.Core;
 
 namespace Facephone.Web
 {
@@ -58,7 +59,7 @@ namespace Facephone.Web
                         return WriteNotFoundAsync(ctx, phoneNumber);
                     }
 
-                    Log($"Found {phoneNumber}, {phone.FacebookId}, {phone.Links.Count} links");
+                    Log($"Found {phoneNumber}, {phone.FacebookId}, {phone.LinksAndHtml.Count} links");
                     return WriteFoundAsync(ctx, phone);
                 }
                 catch (Exception ex)
@@ -95,10 +96,10 @@ namespace Facephone.Web
         Task WriteFoundAsync(IOwinContext ctx, Phone phone)
         {
             ctx.Response.StatusCode = 200;
-            string liLinks = string.Join("\n",phone.Links.Select(l =>
+            string liLinks = string.Join("\n",phone.LinksAndHtml.Select(linkKv =>
             {
-                string link = $"<li><a href='{l}'>{l}</a></li>";
-                if (l.Contains("facebook.com"))
+                string link = $"<li><a href='{linkKv.Key}'>{linkKv.Key}</a><br>{linkKv.Value}</li>";
+                if (linkKv.Key.Contains("facebook.com"))
                 {
                     return $"<b>{link}</b>";
                 }

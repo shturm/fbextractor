@@ -1,5 +1,9 @@
 ﻿using Facephone;
+using Humanizer;
+using Moq;
+using NLog;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +18,11 @@ namespace Facephone.Processor.Tests
         [Test]
         public void BreakdownPhoneNumberTest()
         {
-            var sut = new QueueProcessor();
+            var driverMock = new Mock<IWebDriver>();
+            var loggerMock = new Mock<ILogger>();
+            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+
+            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
             string phoneNumber = "0888123456";
             List<string> expected = new List<string>()
             {
@@ -31,7 +39,11 @@ namespace Facephone.Processor.Tests
         [Test]
         public void BreakdownPhoneNumber_RealCaseTest()
         {
-            var sut = new QueueProcessor();
+            var driverMock = new Mock<IWebDriver>();
+            var loggerMock = new Mock<ILogger>();
+            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+
+            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
             string phoneNumber = "0887059096";
             List<string> expected = new List<string>()
             {
@@ -55,7 +67,11 @@ namespace Facephone.Processor.Tests
         [TestCase("0899-123-456")]
         public void BreakdownPhoneNumber_InvalidInput_Throws(string phoneNumber)
         {
-            var sut = new QueueProcessor();
+            var driverMock = new Mock<IWebDriver>();
+            var loggerMock = new Mock<ILogger>();
+            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+
+            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
             Assert.Throws<ArgumentException>(() =>
             {
                 sut.Breakdown(phoneNumber);
@@ -66,7 +82,11 @@ namespace Facephone.Processor.Tests
         [TestCase("‎0887059096")]
         public void BreakdownPhoneNumber_ValidInput_DoesNotThrows(string phoneNumber)
         {
-            var sut = new QueueProcessor();
+            var driverMock = new Mock<IWebDriver>();
+            var loggerMock = new Mock<ILogger>();
+            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+
+            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
             Assert.DoesNotThrow(() =>
             {
                 sut.Breakdown(phoneNumber);

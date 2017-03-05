@@ -13,6 +13,9 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
 using System.Text.RegularExpressions;
 using Facephone.Processor;
+using Facephone.Core;
+using NLog;
+using Humanizer;
 
 namespace Facephone
 {
@@ -23,33 +26,32 @@ namespace Facephone
 
         CancellationTokenSource _tokenSource;
         bool _initiated = false;
+        private readonly ILogger _logger;
+        private readonly Humanizer.Humanizer _humanizer;
+        private readonly IWebDriver _driver;
 
-        IWebDriver Driver;
-        WebDriverWait Wait;
+        private readonly WebDriverWait Wait;
 
-        public QueueProcessor()
+
+        public QueueProcessor(ILogger logger, IWebDriver driver, Humanizer.Humanizer humanizer)
         {
+            _logger = logger;
+            _driver = driver;
+            _humanizer = humanizer;
+            Wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(double.Parse(ConfigurationManager.AppSettings["MaxSecondsPageLoad"])));
             BannedDomains = GetBannedDomains();
+
+            FacebookLogin();
         }
 
-
-
-        public void Init()
+        private void FacebookLogin()
         {
-            _initiated = true;
-
-            var options = new ChromeOptions();
-            options.AddArgument("--disable-notifications");
-            Driver = new ChromeDriver("selenium", options);
-            Wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(5));
-
-            // facebook login
             Log("Влизане във Фейсбук...");
-            Driver.Navigate().GoToUrl("https://facebook.com");
+            _driver.Navigate().GoToUrl("https://facebook.com");
             Wait.Until(ExpectedConditions.ElementIsVisible(By.Name("email")));
 
-            var elUser = Driver.FindElement(By.Name("email"));
-            var elPass = Driver.FindElement(By.Name("pass"));
+            var elUser = _driver.FindElement(By.Name("email"));
+            var elPass = _driver.FindElement(By.Name("pass"));
             elUser.SendKeys(ConfigurationManager.AppSettings["facebook-username"]);
             elPass.SendKeys(ConfigurationManager.AppSettings["facebook-password"]);
             elPass.SendKeys(Keys.Return);
@@ -59,10 +61,6 @@ namespace Facephone
 
         public void Start()
         {
-            if (!_initiated)
-            {
-                if (ProcessorTask.IsCompleted) throw new MethodAccessException("QueueProcessor not initiated");
-            }
             if (ProcessorTask != null)
             {
                 if (ProcessorTask.IsCompleted) throw new MethodAccessException("QueueProcessor already started");
@@ -83,20 +81,25 @@ namespace Facephone
                     }
 
                     Log($"Processing '{phoneNumber}'");
+                    var linksAndHtml = new Dictionary<string, string>();
                     var fbResult = ScanFacebook(phoneNumber);
-                    var links = new List<string>();
 
                     var googlePhones = Breakdown(phoneNumber);
                     foreach (string gglPhone in googlePhones)
                     {
-                        List<string> gglLinks = ScanGoogle(gglPhone);
-                        links.AddRange(gglLinks);
+                        Dictionary<string, string> gglLinks = ScanGoogle(gglPhone);
+                        foreach (KeyValuePair<string,string> gglLinkKv in gglLinks)
+                        {
+                            if (linksAndHtml.ContainsKey(gglLinkKv.Key)) continue;
+                            linksAndHtml.Add(gglLinkKv.Key, gglLinkKv.Value);
+                        }
                     }
 
-                    if (!string.IsNullOrEmpty(fbResult.FacebookId)) links.Add($"https://www.facebook.com/{fbResult.FacebookId}");
-                    var scanned = new Phone(phoneNumber, fbResult.FacebookId, fbResult.HasPosts, links);
+                    if (!string.IsNullOrEmpty(fbResult.FacebookId)) linksAndHtml.Add($"https://www.facebook.com/{fbResult.FacebookId}", fbResult.Html);
+                    if (fbResult.HasPosts) linksAndHtml.Add($"https://www.facebook.com/search/top/?q={phoneNumber}", fbResult.Html);
+                    var scanned = new Phone(phoneNumber, fbResult.FacebookId, fbResult.HasPosts, linksAndHtml);
 
-                    Log($"Processed {phoneNumber} - {scanned.FacebookId} {scanned.Links.Count} links");
+                    Log($"Processed {phoneNumber} - {scanned.FacebookId} {scanned.LinksAndHtml.Count} links");
                     SaveProcessedPhone(scanned);
 
                     EndProcessing(phoneNumber);
@@ -106,8 +109,6 @@ namespace Facephone
                 }
             }, _tokenSource.Token);
         }
-
-
 
         private List<string> Variations(string phoneNumber)
         {
@@ -226,10 +227,12 @@ namespace Facephone
                     using (SQLiteCommand cmd3 = con.CreateCommand())
                     {
                         cmd3.Transaction = tr;
-                        string values = string.Join(",", p.Links.Select(link => $"({phoneId}, '{link}')").ToList()) ?? null;
+                        string values = string.Join(",", p.LinksAndHtml
+                            .Select(kvLink => $"({phoneId}, '{kvLink.Key}', '{kvLink.Value.Replace("'","''")}')")
+                            .ToList()) ?? null;
                         if (!string.IsNullOrEmpty(values))
                         {
-                            cmd3.CommandText = $"insert into Links (PhoneId, Url) values {values}";
+                            cmd3.CommandText = $"insert into Links (PhoneId, Url, Html) values {values}";
                             cmd3.ExecuteNonQuery();
                         }
                     }
@@ -241,20 +244,26 @@ namespace Facephone
             }
         }
 
-        FacebookScanResult ScanFacebook(string phoneNumber)
+        ScanFacebookResult ScanFacebook(string phoneNumber)
         {
-            Driver.Navigate().GoToUrl($"https://facebook.com/search/top/?q={phoneNumber}");
+            _driver.Navigate().GoToUrl($"https://facebook.com/search/top/?q={phoneNumber}");
             Wait.Until(ExpectedConditions.ElementIsVisible(By.Id("contentArea")));
-            var content = Driver.FindElement(By.Id("contentArea"));
+            var content = _driver.FindElement(By.Id("contentArea"));
+            string html = content.GetInnerHtml();
 
             if (content.Text.Contains("Не успяхме да намерим нищо"))
             {
-                return new FacebookScanResult(null, false);
+                _humanizer.VisitRandomLink();
+                _humanizer.ScrollPage();
+                return new ScanFacebookResult(null, html, false);
             }
 
             if (content.Text.StartsWith("Обществени публикации"))
             {
-                return new FacebookScanResult(null, true);
+                _humanizer.StayOnPage();
+                _humanizer.ScrollPage();
+                _humanizer.VisitRandomLink();
+                return new ScanFacebookResult(null, html, true);
             }
 
             string facebookId = null;
@@ -270,24 +279,35 @@ namespace Facephone
                 facebookId = Regex.Match(url, @"facebook\.com/([a-z0-9.]+)\?", RegexOptions.IgnoreCase).Groups[1].Value;
             }
 
-            return new FacebookScanResult(facebookId);
+            _humanizer.StayOnPage();
+            _humanizer.ScrollPage();
+            _humanizer.VisitRandomLink();
+            return new ScanFacebookResult(facebookId, html);
         }
-        private List<string> ScanGoogle(string gglPhone)
+        /// <summary>
+        /// Make a single google search for a search term
+        /// </summary>
+        /// <param name="gglPhone"></param>
+        /// <returns>key = url, value = html</returns>
+        private Dictionary<string, string> ScanGoogle(string gglPhone)
         {
-            var result = new List<string>();
-            Driver.Navigate().GoToUrl($"https://google.com?#safe=off&q={gglPhone}");
+            var result = new Dictionary<string, string>();
+            _driver.Navigate().GoToUrl($"https://google.com?#safe=off&q={gglPhone}");
             Wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("g")));
-            var gglResults = Driver.FindElements(By.ClassName("g"));
+            var gglResults = _driver.FindElements(By.ClassName("g"));
 
             List<string> variations = Variations(gglPhone.Replace(" ", ""));
 
             foreach (var gglItem in gglResults)
             {
                 string url = gglItem.FindElement(By.TagName("a")).GetAttribute("href");
+                string html = gglItem.FindElement(By.TagName("h3")).GetInnerHtml() + "<br/>" +
+                               gglItem.FindElement(By.ClassName("st")).GetInnerHtml();
+                
                 // always add facebook
                 if (url.Contains("facebook.com"))
                 {
-                    result.Add(url);
+                    result.Add(url,html);
                     continue;
                 }
                 if (BannedDomains.Any(d => url.Contains(d)))
@@ -299,16 +319,21 @@ namespace Facephone
                 {
                     if (gglItem.Text.Contains(v))
                     {
-                        result.Add(url);
+                        result.Add(url,html);
                     }
                 }
             }
+
+            _humanizer.StayOnPage();
+            _humanizer.ScrollPage();
+            _humanizer.VisitRandomLink();
 
             return result;
         }
         void Log(string msg, Phone phone = null)
         {
-            Console.WriteLine("<Facephone.Processor> " + msg);
+            _logger.Info(msg);
+            //Console.WriteLine("<Facephone.Processor> " + msg);
             File.AppendAllText(ConfigurationManager.AppSettings["LogFile"],"<Facephone.Processor> "+ msg + "\n");
         }
         internal List<string> Breakdown(string phoneNumber)
@@ -351,7 +376,6 @@ namespace Facephone
 
             return result;
         }
-
         private List<string> GetBannedDomains()
         {
             List<string> result = new List<string>();
@@ -378,10 +402,9 @@ namespace Facephone
 
             return result;
         }
-
         public void Dispose()
         {
-            Driver.Close();
+            _driver.Close();
         }
     }
 }

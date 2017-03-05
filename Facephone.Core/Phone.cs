@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 
-namespace Facephone
+namespace Facephone.Core
 {
 	public class Phone
 	{
 		public readonly string PhoneNumber;
 		public readonly string FacebookId;
 		public readonly bool HasFacebookPosts;
-        public readonly List<string> Links;
+        public readonly Dictionary<string,string> LinksAndHtml;
 
-		public  Phone(string phone, string fbid, bool hasPosts, List<string> links)
+		public  Phone(string phone, string fbid, bool hasPosts, Dictionary<string, string> linksAndHtml)
 		{
 			PhoneNumber = phone;
 			FacebookId = fbid;
-			Links = links;
+			LinksAndHtml = linksAndHtml;
             HasFacebookPosts = hasPosts;
 		}
 	}

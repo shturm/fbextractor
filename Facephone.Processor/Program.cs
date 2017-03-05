@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Facephone.Core;
+using NLog;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System;
 using System.Configuration;
 using System.IO;
 
@@ -8,19 +12,24 @@ namespace Facephone.Processor
 	{
 		public static void Main (string [] args)
 		{
-            Log("FACEPHONE.PROCESSOR\n===================");
-			QueueProcessor processor = new QueueProcessor ();
-            processor.Init();
-            Log("Starting...");
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info("FACEPHONE.PROCESSOR================================");
+            var driver = CreateDriver();
+            var humanizer = new Humanizer.Humanizer(driver, logger);
+            var processor = new QueueProcessor (logger, driver, humanizer);
+            
+            logger.Info("Starting...");
 			processor.Start ();
 			processor.ProcessorTask.Wait ();
-            Log("Stopping...");
+            logger.Info("Stopping...");
 		}
 
-        static void Log(string msg, Phone phone = null)
+        static IWebDriver CreateDriver()
         {
-            Console.WriteLine("<Facephone.Processor> " + msg);
-            File.AppendAllText(ConfigurationManager.AppSettings["LogFile"], "<Facephone.Processor> " + msg + "\n");
+            var options = new ChromeOptions();
+            options.AddArgument("--disable-notifications");
+            var driver = new ChromeDriver("selenium", options);
+            return driver;
         }
     }
 }

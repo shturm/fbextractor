@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace Facephone.Processor
 {
-    class FacebookScanResult
+    class ScanFacebookResult
     {
         public readonly bool HasPosts = false;
         public readonly string FacebookId = null;
+        public readonly string Html = null;
 
-        public FacebookScanResult(string facebookId, bool hasPosts = false)
+        public ScanFacebookResult(string facebookId, string html, bool hasPosts = false)
         {
             FacebookId = facebookId;
             HasPosts = hasPosts;
+            Html = html;
             Validate();
         }
 
