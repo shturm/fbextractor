@@ -9,6 +9,7 @@ namespace FBExtractor
 	{
 		string FilePath;
 		JObject jObject;
+        static object lockObj;
 
 		public SfxConfiguration (string filePath)
 		{
@@ -22,9 +23,12 @@ namespace FBExtractor
 			try {
 				postdata.Add (postId, JToken.FromObject (new{ read_on = Timestamp ()}));
 			} catch (ArgumentException ex) {
-				Program.OnLog ($"\tPost {postId} already marked read");
+				FBExtractorMain.OnLog ($"\tPost {postId} already marked read");
 			}
-			File.WriteAllText (FilePath, jObject.ToString ());
+            lock(lockObj)
+            {
+			    File.WriteAllText (FilePath, jObject.ToString ());
+            }
 		}
 
 		string Timestamp()

@@ -9,10 +9,10 @@ public partial class MainWindow : Gtk.Window
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-		FBExtractor.Program.StatusChanged += OnStatusChanged;
-		FBExtractor.Program.LogEvent += OnLog;
-		FBExtractor.Program.CurrentAlertChanged += OnAlertChanged;
-		FBExtractor.Program.CycleChanged += OnCycleStatusChanged;
+		FBExtractor.FBExtractorMain.StatusChanged += OnStatusChanged;
+		FBExtractor.FBExtractorMain.LogEvent += OnLog;
+		FBExtractor.FBExtractorMain.CurrentAlertChanged += OnAlertChanged;
+		FBExtractor.FBExtractorMain.CycleChanged += OnCycleStatusChanged;
 	}
 
 	void OnLog (string msg, Alert alert = null)
@@ -60,11 +60,11 @@ public partial class MainWindow : Gtk.Window
 		//FBExtractor.Program.Running = !FBExtractor.Program.Running;
 		//FBExtractor.Program.StatusChanged (FBExtractor.Program.Running);// ??
 
-		if (FBExtractor.Program.Running) 
+		if (FBExtractor.FBExtractorMain.Running) 
 		{
-			FBExtractor.Program.Stop ();
+			FBExtractor.FBExtractorMain.Stop ();
 		} else {
-			FBExtractor.Program.Start ();
+			FBExtractor.FBExtractorMain.Start ();
 		}
 
 		//var msg = new MessageDialog (null, DialogFlags.NoSeparator, MessageType.Info, ButtonsType.None, "It worked");

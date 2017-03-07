@@ -20,9 +20,9 @@ namespace Facephone.Processor.Tests
         {
             var driverMock = new Mock<IWebDriver>();
             var loggerMock = new Mock<ILogger>();
-            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+            var humanizer = new Humanizer.Humanizer(driverMock.Object);
 
-            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
+            var sut = new QueueProcessor(driverMock.Object, humanizer);
             string phoneNumber = "0888123456";
             List<string> expected = new List<string>()
             {
@@ -41,9 +41,9 @@ namespace Facephone.Processor.Tests
         {
             var driverMock = new Mock<IWebDriver>();
             var loggerMock = new Mock<ILogger>();
-            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+            var humanizer = new Humanizer.Humanizer(driverMock.Object);
 
-            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
+            var sut = new QueueProcessor(driverMock.Object, humanizer);
             string phoneNumber = "0887059096";
             List<string> expected = new List<string>()
             {
@@ -69,9 +69,9 @@ namespace Facephone.Processor.Tests
         {
             var driverMock = new Mock<IWebDriver>();
             var loggerMock = new Mock<ILogger>();
-            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+            var humanizer = new Humanizer.Humanizer(driverMock.Object);
 
-            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
+            var sut = new QueueProcessor(driverMock.Object, humanizer);
             Assert.Throws<ArgumentException>(() =>
             {
                 sut.Breakdown(phoneNumber);
@@ -84,9 +84,9 @@ namespace Facephone.Processor.Tests
         {
             var driverMock = new Mock<IWebDriver>();
             var loggerMock = new Mock<ILogger>();
-            var humanizer = new Humanizer.Humanizer(driverMock.Object, loggerMock.Object);
+            var humanizer = new Humanizer.Humanizer(driverMock.Object);
 
-            var sut = new QueueProcessor(loggerMock.Object, driverMock.Object, humanizer);
+            var sut = new QueueProcessor(driverMock.Object, humanizer);
             Assert.DoesNotThrow(() =>
             {
                 sut.Breakdown(phoneNumber);

@@ -33,9 +33,9 @@ namespace Facephone
         private readonly WebDriverWait Wait;
 
 
-        public QueueProcessor(ILogger logger, IWebDriver driver, Humanizer.Humanizer humanizer)
+        public QueueProcessor(IWebDriver driver, Humanizer.Humanizer humanizer)
         {
-            _logger = logger;
+            _logger = LogManager.GetCurrentClassLogger();
             _driver = driver;
             _humanizer = humanizer;
             Wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(double.Parse(ConfigurationManager.AppSettings["MaxSecondsPageLoad"])));

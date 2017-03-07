@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facephone.Processor.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Humanizer", "Humanizer\Humanizer.csproj", "{BB834A0E-8867-4EFA-AFA4-EC8C3F4BC44B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facegroup", "Facegroup\Facegroup.csproj", "{CE2D8458-010A-43FA-849D-6F3502103ED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facegroup.Tests", "Facegroup.Tests\Facegroup.Tests.csproj", "{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +117,30 @@ Global
 		{BB834A0E-8867-4EFA-AFA4-EC8C3F4BC44B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB834A0E-8867-4EFA-AFA4-EC8C3F4BC44B}.Release|x86.ActiveCfg = Release|Any CPU
 		{BB834A0E-8867-4EFA-AFA4-EC8C3F4BC44B}.Release|x86.Build.0 = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Debug|x86.Build.0 = Debug|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release Facephone|Any CPU.ActiveCfg = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release Facephone|Any CPU.Build.0 = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release Facephone|x86.ActiveCfg = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release Facephone|x86.Build.0 = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release|x86.ActiveCfg = Release|Any CPU
+		{CE2D8458-010A-43FA-849D-6F3502103ED2}.Release|x86.Build.0 = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Debug|x86.Build.0 = Debug|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release Facephone|Any CPU.ActiveCfg = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release Facephone|Any CPU.Build.0 = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release Facephone|x86.ActiveCfg = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release Facephone|x86.Build.0 = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release|x86.ActiveCfg = Release|Any CPU
+		{B12E71DB-EC8C-42EA-B19F-147DB9E5DAE1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

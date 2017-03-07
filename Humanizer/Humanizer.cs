@@ -12,12 +12,12 @@ namespace Humanizer
 {
     public class Humanizer : IHumanizer
     {
-        private readonly ILogger _logger;
+        public bool Enabled { get { return ConfigurationManager.AppSettings["Humanizer.Power"].ToUpper() == "ON"; } }
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly IWebDriver _driver;
         
-        public Humanizer(IWebDriver driver, ILogger logger)
+        public Humanizer(IWebDriver driver)
         {
-            _logger = logger;
             _driver = driver;
         }
 
@@ -81,9 +81,15 @@ namespace Humanizer
                 _logger.Warn($"randomAnchorsIndex ({randomAnchorsIndex}) out of range ({anchorsWithHref.Count})");
                 return;
             }
-            anchorsWithHref[randomAnchorsIndex].Click();
+            try
+            {
+                anchorsWithHref[randomAnchorsIndex].Click();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Could not click random link [{anchorsWithHref[randomAnchorsIndex].Text}]({anchorsWithHref[randomAnchorsIndex].GetAttribute("href")})");
+            }
             WaitRandom();
-
         }
 
         public void WaitRandom()

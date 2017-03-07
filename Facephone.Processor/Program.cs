@@ -8,15 +8,15 @@ using System.IO;
 
 namespace Facephone.Processor
 {
-	class MainClass
+	class FacephoneMain
 	{
 		public static void Main (string [] args)
 		{
             var logger = LogManager.GetCurrentClassLogger();
             logger.Info("FACEPHONE.PROCESSOR================================");
             var driver = CreateDriver();
-            var humanizer = new Humanizer.Humanizer(driver, logger);
-            var processor = new QueueProcessor (logger, driver, humanizer);
+            var humanizer = new Humanizer.Humanizer(driver);
+            var processor = new QueueProcessor (driver, humanizer);
             
             logger.Info("Starting...");
 			processor.Start ();

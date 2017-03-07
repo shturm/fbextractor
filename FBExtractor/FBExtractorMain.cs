@@ -14,7 +14,7 @@ using System.Text;
 
 namespace FBExtractor
 {
-	public class Program
+	public class FBExtractorMain
 	{
 		static IWebDriver Driver;
 		static WebDriverWait Wait;

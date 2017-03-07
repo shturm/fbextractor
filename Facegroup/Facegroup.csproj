@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CE2D8458-010A-43FA-849D-6F3502103ED2}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Facegroup</RootNamespace>
+    <AssemblyName>Facegroup</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.3\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Selenium.WebDriverBackedSelenium, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriverBackedSelenium.3.2.0\lib\net40\Selenium.WebDriverBackedSelenium.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ThoughtWorks.Selenium.Core, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.RC.3.1.0\lib\net40\ThoughtWorks.Selenium.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebDriver, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.3.2.0\lib\net40\WebDriver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebDriver.Support, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.Support.3.2.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FacegroupMain.cs" />
+    <Compile Include="Entities\FbGroup.cs" />
+    <Compile Include="Entities\FbPost.cs" />
+    <Compile Include="Managers\FbGroupManager.cs" />
+    <Compile Include="Managers\FbPostManager.cs" />
+    <Compile Include="SeleniumExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SfxConfiguration.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="App.config" />
+    <None Include="selenium\chromedriver.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="selenium\chromedriver">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="sfx.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="social-fixer-for-facebook\x.js" />
+    <None Include="social-fixer-for-facebook\watch\social_fixer_watch.js" />
+    <None Include="social-fixer-for-facebook\vue_sfx.js" />
+    <None Include="social-fixer-for-facebook\vue.min.js" />
+    <None Include="social-fixer-for-facebook\trending_bars\trending_bars.js" />
+    <None Include="social-fixer-for-facebook\tips\tip_timeline_posts.js" />
+    <None Include="social-fixer-for-facebook\tips\tip_page_notifications.js" />
+    <None Include="social-fixer-for-facebook\tips\tip_live_video_notifications.js" />
+    <None Include="social-fixer-for-facebook\tips\tip_hide_birthday.js" />
+    <None Include="social-fixer-for-facebook\tips\tip_friends_privacy.js" />
+    <None Include="social-fixer-for-facebook\tips\tip_autoplay_videos.js" />
+    <None Include="social-fixer-for-facebook\style.css" />
+    <None Include="social-fixer-for-facebook\stretch_wide\stretch_wide.js" />
+    <None Include="social-fixer-for-facebook\storage_check\storage_check.js" />
+    <None Include="social-fixer-for-facebook\sticky_note\sticky_note.js" />
+    <None Include="social-fixer-for-facebook\stealthmode\stealthmode.js" />
+    <None Include="social-fixer-for-facebook\small_tile_440x280.png" />
+    <None Include="social-fixer-for-facebook\sfx_collision\sfx_collision.js" />
+    <None Include="social-fixer-for-facebook\remove_columns\remove_columns.js" />
+    <None Include="social-fixer-for-facebook\regex_tester\regex_tester.js" />
+    <None Include="social-fixer-for-facebook\purify.min.js" />
+    <None Include="social-fixer-for-facebook\post_processor.js" />
+    <None Include="social-fixer-for-facebook\post_font\post_font.js" />
+    <None Include="social-fixer-for-facebook\post_filters\post_tabs.js" />
+    <None Include="social-fixer-for-facebook\post_filters\post_filters.js" />
+    <None Include="social-fixer-for-facebook\options.html" />
+    <None Include="social-fixer-for-facebook\options\options.js" />
+    <None Include="social-fixer-for-facebook\notify\notify.js" />
+    <None Include="social-fixer-for-facebook\notification_popup\notification_popup.js" />
+    <None Include="social-fixer-for-facebook\most_recent\most_recent.js" />
+    <None Include="social-fixer-for-facebook\messages\message_links_to_messenger.js" />
+    <None Include="social-fixer-for-facebook\menu\menu.js" />
+    <None Include="social-fixer-for-facebook\mark_read\mark_read.js" />
+    <None Include="social-fixer-for-facebook\logo256.png" />
+    <None Include="social-fixer-for-facebook\large_tile_920x680.png" />
+    <None Include="social-fixer-for-facebook\inline-images.css" />
+    <None Include="social-fixer-for-facebook\index.js" />
+    <None Include="social-fixer-for-facebook\icon96.png" />
+    <None Include="social-fixer-for-facebook\icon64.png" />
+    <None Include="social-fixer-for-facebook\icon48.png" />
+    <None Include="social-fixer-for-facebook\icon38.png" />
+    <None Include="social-fixer-for-facebook\icon32.png" />
+    <None Include="social-fixer-for-facebook\icon19.png" />
+    <None Include="social-fixer-for-facebook\icon16.png" />
+    <None Include="social-fixer-for-facebook\icon128.png" />
+    <None Include="social-fixer-for-facebook\hovercard\hovercard.js" />
+    <None Include="social-fixer-for-facebook\hide\hide.js" />
+    <None Include="social-fixer-for-facebook\fx.js" />
+    <None Include="social-fixer-for-facebook\font_family\font_family.js" />
+    <None Include="social-fixer-for-facebook\fix_timestamps\fix_timestamps.js" />
+    <None Include="social-fixer-for-facebook\external_css\external_css.js" />
+    <None Include="social-fixer-for-facebook\donate\donate.js" />
+    <None Include="social-fixer-for-facebook\display_tweaks\display_tweaks.js" />
+    <None Include="social-fixer-for-facebook\disable_tooltips\disable_tooltips.js" />
+    <None Include="social-fixer-for-facebook\control_panel\control_panel.js" />
+    <None Include="social-fixer-for-facebook\comment_navigator\comment_navigator.js" />
+    <None Include="social-fixer-for-facebook\comment_button\comment_button.js" />
+    <None Include="social-fixer-for-facebook\bubble_note\bubble_note.js" />
+    <None Include="social-fixer-for-facebook\apps\apps.js" />
+    <None Include="social-fixer-for-facebook\anonymize\anonymize.js" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="social-fixer-for-facebook\manifest.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Humanizer\Humanizer.csproj">
+      <Project>{bb834a0e-8867-4efa-afa4-ec8c3f4bc44b}</Project>
+      <Name>Humanizer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="social-fixer-for-facebook\debug\" />
+    <Folder Include="social-fixer-for-facebook\_metadata\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(ProjectDir)social-fixer-for-facebook social-fixer-for-facebook\ /Y /E</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

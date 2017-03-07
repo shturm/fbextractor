@@ -1,0 +1,32 @@
+{
+  "options": {},
+  "filters": [],
+  "tweaks": [],
+  "hiddens": {},
+  "postdata": {
+    "0123456789": 1485065421577
+  },
+  "friends": {},
+  "stats": {
+    "sfx_news_checked_on": 1485065372244,
+    "installed_on": 1485065480981
+  },
+  "tasks": {
+    "clean_postdata_cache": {
+      "run_on": 1485065368662
+    },
+    "news_alerts": {
+      "run_on": 1485065421573
+    },
+    "update_filter_subscriptions": {
+      "run_on": 1485065368666
+    },
+    "update_tweak_subscriptions": {
+      "run_on": 1485065368666
+    }
+  },
+  "messages": {},
+  "storage_check": {
+    "storage_checked_on": 1485065421577
+  }
+}

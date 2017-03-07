@@ -10,11 +10,11 @@ namespace FBExtractorGUI
 		{
 			Application.Init ();
 			MainWindow win = new MainWindow ();
-			FBExtractor.Program.Init ();
+			FBExtractor.FBExtractorMain.Init ();
 			win.Show ();
 
 			Application.Run ();
-			FBExtractor.Program.CloseDriver ();
+			FBExtractor.FBExtractorMain.CloseDriver ();
 		}
 	}
 }
