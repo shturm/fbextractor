@@ -20,6 +20,7 @@ namespace Facephone.Web
             string uri = ConfigurationManager.AppSettings["Uri"];
 
             Log("FACEPHONE.WEB\n===================");
+            Log(uri);
             using (WebApp.Start<Startup> (uri)) {
                 Log("Started");
 				Console.ReadKey ();
