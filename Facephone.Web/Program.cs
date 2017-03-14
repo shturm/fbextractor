@@ -16,7 +16,8 @@ namespace Facephone.Web
 	{
 		public static void Main (string [] args)
 		{
-            string uri = "http://localhost:8080";
+            
+            string uri = ConfigurationManager.AppSettings["Uri"];
 
             Log("FACEPHONE.WEB\n===================");
             using (WebApp.Start<Startup> (uri)) {
