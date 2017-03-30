@@ -95,8 +95,11 @@ namespace Facephone
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(fbResult.FacebookId)) linksAndHtml.Add($"https://www.facebook.com/{fbResult.FacebookId}", fbResult.Html);
-                    if (fbResult.HasPosts) linksAndHtml.Add($"https://www.facebook.com/search/top/?q={phoneNumber}", fbResult.Html);
+                    if (fbResult.Succeeded)
+                    {
+                        if (!string.IsNullOrEmpty(fbResult.FacebookId)) linksAndHtml.Add($"https://www.facebook.com/{fbResult.FacebookId}", fbResult.Html);
+                        if (fbResult.HasPosts) linksAndHtml.Add($"https://www.facebook.com/search/top/?q={phoneNumber}", fbResult.Html);
+                    }
                     var scanned = new Phone(phoneNumber, fbResult.FacebookId, fbResult.HasPosts, linksAndHtml);
 
                     Log($"Processed {phoneNumber} - {scanned.FacebookId} {scanned.LinksAndHtml.Count} links");
@@ -246,43 +249,62 @@ namespace Facephone
 
         ScanFacebookResult ScanFacebook(string phoneNumber)
         {
-            _driver.Navigate().GoToUrl($"https://facebook.com/search/top/?q={phoneNumber}");
-            Wait.Until(ExpectedConditions.ElementIsVisible(By.Id("contentArea")));
-            var content = _driver.FindElement(By.Id("contentArea"));
-            string html = content.GetInnerHtml();
-
-            if (content.Text.Contains("Не успяхме да намерим нищо"))
+            try
             {
-                _humanizer.VisitRandomLink();
-                _humanizer.ScrollPage();
-                return new ScanFacebookResult(null, html, false);
-            }
+                _driver.Navigate().GoToUrl($"https://facebook.com/search/top/?q={phoneNumber}");
+                Wait.Until(ExpectedConditions.ElementIsVisible(By.Id("contentArea")));
+                var content = _driver.FindElement(By.Id("contentArea"));
+                string html = content.GetInnerHtml();
 
-            if (content.Text.StartsWith("Обществени публикации"))
-            {
+                if (content.Text.Contains("Не успяхме да намерим нищо"))
+                {
+                    _humanizer.VisitRandomLink();
+                    _humanizer.ScrollPage();
+                    return new ScanFacebookResult(null, html, false);
+                }
+
+                if (content.Text.StartsWith("Обществени публикации"))
+                {
+                    _humanizer.StayOnPage();
+                    _humanizer.ScrollPage();
+                    _humanizer.VisitRandomLink();
+                    return new ScanFacebookResult(null, html, true);
+                }
+
+                string facebookId = null;
+                string url = null;
+                try
+                {
+                    url = content.FindElement(By.TagName("a")).GetAttribute("href");
+                }
+                catch (Exception ex2)
+                {
+                    _logger.Error(ex2, "Could not find anchor tag in content when expecting facebook profile");
+                }
+                
+                if (string.IsNullOrEmpty(facebookId))
+                {
+                    // https://www.facebook.com/profile.php?id=100015048220220&ref=br_rs
+                    facebookId = Regex.Match(url, @"profile.php\?id=(\d+)&", RegexOptions.IgnoreCase).Groups[1].Value;
+                }
+                if (string.IsNullOrEmpty(facebookId))
+                {
+                    // https://www.facebook.com/gosho.penchev?ref=br_rs
+                    facebookId = Regex.Match(url, @"facebook\.com/([a-z0-9.]+)\?", RegexOptions.IgnoreCase).Groups[1].Value;
+                }
+
                 _humanizer.StayOnPage();
                 _humanizer.ScrollPage();
                 _humanizer.VisitRandomLink();
-                return new ScanFacebookResult(null, html, true);
+                return new ScanFacebookResult(facebookId, html);
             }
-
-            string facebookId = null;
-            string url = content.FindElement(By.TagName("a")).GetAttribute("href");
-            if (string.IsNullOrEmpty(facebookId))
+            catch (Exception ex)
             {
-                // https://www.facebook.com/profile.php?id=100015048220220&ref=br_rs
-                facebookId = Regex.Match(url, @"profile.php\?id=(\d+)&", RegexOptions.IgnoreCase).Groups[1].Value;
+                _logger.Error(ex, $"Could not scan {phoneNumber} in Facebook");
+                return ScanFacebookResult.CreateFailedResult();
             }
-            if (string.IsNullOrEmpty(facebookId))
-            {
-                // https://www.facebook.com/gosho.penchev?ref=br_rs
-                facebookId = Regex.Match(url, @"facebook\.com/([a-z0-9.]+)\?", RegexOptions.IgnoreCase).Groups[1].Value;
-            }
-
-            _humanizer.StayOnPage();
-            _humanizer.ScrollPage();
-            _humanizer.VisitRandomLink();
-            return new ScanFacebookResult(facebookId, html);
+            
+            
         }
         /// <summary>
         /// Make a single google search for a search term
@@ -300,27 +322,49 @@ namespace Facephone
 
             foreach (var gglItem in gglResults)
             {
-                string url = gglItem.FindElement(By.TagName("a")).GetAttribute("href");
-                string html = gglItem.FindElement(By.TagName("h3")).GetInnerHtml() + "<br/>" +
-                               gglItem.FindElement(By.ClassName("st")).GetInnerHtml();
+                try
+                {
+                    string url = gglItem.FindElement(By.TagName("a")).GetAttribute("href");
+                    string html = gglItem.FindElement(By.TagName("h3")).GetInnerHtml() + "<br/>" +
+                                   gglItem.FindElement(By.ClassName("st")).GetInnerHtml();
                 
-                // always add facebook
-                if (url.Contains("facebook.com"))
-                {
-                    result.Add(url,html);
-                    continue;
-                }
-                if (BannedDomains.Any(d => url.Contains(d)))
-                {
-                    continue;
-                }
-
-                foreach (var v in variations)
-                {
-                    if (gglItem.Text.Contains(v))
+                    // always add facebook
+                    if (url.Contains("facebook.com"))
                     {
-                        result.Add(url,html);
+                        try
+                        {
+                            result.Add(url,html);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Warn($"Could not add '{url}' to local list, key already exists");
+                        }
+                        continue;
                     }
+                    if (BannedDomains.Any(d => url.Contains(d)))
+                    {
+                        continue;
+                    }
+
+                    foreach (var v in variations)
+                    {
+                        if (gglItem.Text.Contains(v))
+                        {
+                            try
+                            {
+                                result.Add(url, html);
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.Warn($"Could not add '{url}' to local list, key already exists");
+                            }
+                        }
+                    }
+                }
+                catch (Exception gglItemException)
+                {
+                    _logger.Error(gglItemException, $"Could not collect results from google page for {gglPhone}");
+                    continue;
                 }
             }
 

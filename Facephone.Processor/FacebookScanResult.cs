@@ -11,13 +11,21 @@ namespace Facephone.Processor
         public readonly bool HasPosts = false;
         public readonly string FacebookId = null;
         public readonly string Html = null;
+        public readonly bool Succeeded = true;
 
-        public ScanFacebookResult(string facebookId, string html, bool hasPosts = false)
+        public ScanFacebookResult(string facebookId, string html, bool hasPosts = false, bool succeeded = true)
         {
             FacebookId = facebookId;
             HasPosts = hasPosts;
             Html = html;
+            Succeeded = succeeded;
             Validate();
+        }
+
+        public static ScanFacebookResult CreateFailedResult()
+        {
+            var result = new ScanFacebookResult(null, null, false, false);
+            return result;
         }
 
         private void Validate()
