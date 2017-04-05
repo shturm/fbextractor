@@ -31,6 +31,8 @@ namespace Facegroup
             options.AddExtensions();
             var driver = new ChromeDriver("selenium",options);
             var sfx = new SfxConfiguration(ConfigurationManager.AppSettings["SfxConfigurationFile"]);
+
+            bool reverseGroupOrder = ConfigurationManager.AppSettings["ReverseGroupOrder"].ToUpper() == "ON" ? true : false;
             
             AdminLogin(driver);
             FacebookLogin(driver);
@@ -39,32 +41,76 @@ namespace Facegroup
             var postManager = new FbPostManager(driver, sfx);
 
             IEnumerable<FbGroup> unreadGroups = groupManager.GetUnreadGroups();
-            foreach (var fbGroup in unreadGroups)
+            if (reverseGroupOrder)
             {
-                _logger.Info($"------------------- Обработка на група: {fbGroup.ToString()} -----------------------");
-                try
+                _logger.Info($"Обработка на {unreadGroups.Count()} групи с непрочетени публикации в ОБРАТЕН ред");
+                foreach (var fbGroup in unreadGroups)
                 {
-                    IEnumerable<IWebElement> postsEl = groupManager.GetPosts(fbGroup);
-                    _logger.Info($"{postsEl.Count()} поста за обработка в група {fbGroup.ToString()}");
-                    foreach (var postEl in postsEl)
+                    _logger.Info($"------------------- Обработка на група: {fbGroup.ToString()} -----------------------");
+                    try
                     {
-                        var fbPost = new FbPost(postEl);
-                        _logger.Info($"Обработка на пост: {fbPost.ToString()}");
-                        try
+                        IEnumerable<IWebElement> postsEl = groupManager.GetPosts(fbGroup);
+                        _logger.Info($"{postsEl.Count()} поста за обработка в група {fbGroup.ToString()}");
+                        int countPostsInGroupSuccess = 0;
+                        int countPostsInGroupFail = 0;
+                        foreach (var postEl in postsEl)
                         {
-                            postManager.ProcessPostElement(postEl);
+                            var fbPost = new FbPost(postEl);
+                            _logger.Info($"Обработка на пост: {fbPost.ToString()}");
+                            try
+                            {
+                                postManager.ProcessPostElement(postEl);
+                                countPostsInGroupSuccess++;
+                            }
+                            catch (Exception postEx)
+                            {
+                                _logger.Error(postEx, $"Грешка при обработка на пост: {fbPost}");
+                                countPostsInGroupFail++;
+                            }
                         }
-                        catch (Exception postEx)
-                        {
-                            _logger.Error(postEx, $"Грешка при обработка на пост: {fbPost}");
-                        }
+                        _logger.Info($"Общо за групата: {countPostsInGroupSuccess} успешно обработени и {countPostsInGroupFail} неуспешни");
                     }
-                }
-                catch (Exception ex)
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, $"Грешка при обработка на група '{fbGroup.GroupName}' - {fbGroup.GroupUrl}");
+                        continue;
+                    }
+                } // end foreach group
+            } else
+            {
+                _logger.Info($"Обработка на {unreadGroups.Count()} групи с непрочетени публикации в НОРМАЛЕН ред");
+                foreach (var fbGroup in unreadGroups)
                 {
-                    _logger.Error(ex, $"Грешка при обработка на група '{fbGroup.GroupName}' - {fbGroup.GroupUrl}");
-                    continue;
-                }
+                    _logger.Info($"------------------- Обработка на група: {fbGroup.ToString()} -----------------------");
+                    try
+                    {
+                        IEnumerable<IWebElement> postsEl = groupManager.GetPosts(fbGroup);
+                        _logger.Info($"{postsEl.Count()} поста за обработка в група {fbGroup.ToString()}");
+                        int countPostsInGroupSuccess = 0;
+                        int countPostsInGroupFail = 0;
+                        foreach (var postEl in postsEl)
+                        {
+                            var fbPost = new FbPost(postEl);
+                            _logger.Info($"Обработка на пост: {fbPost.ToString()}");
+                            try
+                            {
+                                postManager.ProcessPostElement(postEl);
+                                countPostsInGroupSuccess++;
+                            }
+                            catch (Exception postEx)
+                            {
+                                _logger.Error(postEx, $"Грешка при обработка на пост: {fbPost}");
+                                countPostsInGroupFail++;
+                            }
+                        }
+                        _logger.Info($"Общо за групата: {countPostsInGroupSuccess} успешно обработени и {countPostsInGroupFail} неуспешни");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, $"Грешка при обработка на група '{fbGroup.GroupName}' - {fbGroup.GroupUrl}");
+                        continue;
+                    }
+                } // end foreach group
             }
         }
 

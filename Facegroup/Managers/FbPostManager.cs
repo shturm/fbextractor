@@ -46,7 +46,10 @@ namespace Facegroup
             }
             try
             {
+#if DEBUG
+#else
                 AdminCreatePostDb(fbPost);
+#endif
             }
             catch (Exception ex)
             {
